@@ -1,0 +1,110 @@
+---
+---
+
+<section class="hero" id="hero">
+  <div class="hero__content container">
+    <span class="hero__label label">Estudio de diseño & marketing</span>
+    <h1 class="hero__title">Marcas que<br/>dejan huella</h1>
+    <p class="hero__subtitle">
+      Diseñamos identidades, construimos estrategias, contamos historias. Cada proyecto es una expedición.
+    </p>
+    <div class="hero__actions">
+      <a href="#trabajos" class="btn btn--primary">
+        Ver trabajos
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 3L8 13M8 13L13 8M8 13L3 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#contacto" class="btn btn--outline">Hablemos</a>
+    </div>
+  </div>
+  <div class="hero__scroll-hint" aria-hidden="true">
+    <span class="hero__scroll-line"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    height: 50vh;
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: var(--negro);
+    padding: 0 var(--space-md);
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    max-width: 600px;
+  }
+
+  .hero__label {
+    color: var(--naranja);
+    animation: fadeInUp 0.5s var(--ease-out) 0.1s both;
+  }
+
+  .hero__title {
+    color: var(--hueso);
+    letter-spacing: var(--tracking-tight);
+    animation: fadeInUp 0.5s var(--ease-out) 0.2s both;
+  }
+
+  .hero__subtitle {
+    color: var(--gris);
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    max-width: 480px;
+    animation: fadeInUp 0.5s var(--ease-out) 0.3s both;
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+    animation: fadeInUp 0.5s var(--ease-out) 0.4s both;
+  }
+
+  .hero__actions .btn--outline {
+    color: var(--hueso);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  .hero__actions .btn--outline:hover {
+    border-color: var(--hueso);
+  }
+
+  .hero__scroll-hint {
+    position: absolute;
+    bottom: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero__scroll-line {
+    display: block;
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(to bottom, var(--naranja), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      height: 50vh;
+      min-height: 320px;
+    }
+
+    .hero__actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

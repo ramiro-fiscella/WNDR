@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NavBar from '../../components/NavBar.astro';
+import Footer from '../../components/Footer.astro';
+import TagList from '../../components/TagList.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const allTags = [...new Set(posts.flatMap(p => p.data.tags))];
+---
+
+<Layout title="Blog — ESTUDIO WANDER" description="Ideas, procesos y cosas que nos parecen interesantes.">
+  <NavBar currentPath="/blog" />
+
+  <main>
+    <section class="blog-index">
+      <div class="blog-index__header">
+        <div class="container">
+          <span class="label">Blog</span>
+          <h1>Notas del camino</h1>
+          <p class="blog-index__intro">Ideas, procesos y cosas que nos parecen interesantes.</p>
+        </div>
+      </div>
+
+      <div class="container blog-index__content">
+        {allTags.length > 0 && (
+          <div class="blog-index__tags">
+            <span class="label">Filtrar:</span>
+            <TagList tags={allTags} basePath="/blog" />
+          </div>
+        )}
+
+        <div class="blog-index__list">
+          {posts.map((post) => (
+            <a href={`/blog/${post.id}`} class="blog-list-item">
+              <time class="blog-list-item__date label" datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </time>
+              <div class="blog-list-item__body">
+                <h3 class="blog-list-item__title">{post.data.title}</h3>
+                <p class="blog-list-item__desc">{post.data.description}</p>
+              </div>
+              <span class="blog-list-item__arrow">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .blog-index__header {
+    background-color: var(--negro);
+    padding-top: calc(60px + var(--space-xl));
+    padding-bottom: var(--space-xl);
+    color: var(--hueso);
+  }
+
+  .blog-index__header .label {
+    color: var(--lila);
+    display: block;
+    margin-bottom: var(--space-xs);
+  }
+
+  .blog-index__header h1 {
+    color: var(--hueso);
+    font-size: var(--fs-2xl);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-xs);
+  }
+
+  .blog-index__intro {
+    color: var(--gris);
+    font-size: var(--fs-base);
+  }
+
+  .blog-index__content {
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .blog-index__tags {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .blog-index__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-list-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: var(--space-md);
+    align-items: center;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--borde);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .blog-list-item:first-child {
+    border-top: 1px solid var(--borde);
+  }
+
+  .blog-list-item:hover {
+    padding-left: var(--space-sm);
+    background: var(--lila-soft);
+    border-radius: var(--radius-md);
+  }
+
+  .blog-list-item__date {
+    color: var(--gris);
+    font-size: var(--fs-xs);
+  }
+
+  .blog-list-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .blog-list-item__title {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  .blog-list-item__desc {
+    font-size: var(--fs-sm);
+    color: var(--gris);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .blog-list-item__arrow {
+    font-size: var(--fs-md);
+    color: var(--borde);
+    transition: all var(--duration-fast);
+  }
+
+  .blog-list-item:hover .blog-list-item__arrow {
+    color: var(--lila);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .blog-list-item {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-sm);
+    }
+
+    .blog-list-item__date {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

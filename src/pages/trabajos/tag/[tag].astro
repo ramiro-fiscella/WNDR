@@ -1,0 +1,156 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import NavBar from '../../../components/NavBar.astro';
+import Footer from '../../../components/Footer.astro';
+import TagList from '../../../components/TagList.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const tags = [...new Set(projects.flatMap(p => p.data.tags))];
+  return tags.map(tag => ({
+    params: { tag: tag.toLowerCase() },
+    props: {
+      tag,
+      projects: projects
+        .filter(p => p.data.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase()))
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+    },
+  }));
+}
+
+const { tag, projects } = Astro.props;
+---
+
+<Layout title={`#${tag} — Trabajos — ESTUDIO WANDER`} description={`Proyectos sobre ${tag}`}>
+  <NavBar currentPath="/trabajos" />
+
+  <main>
+    <section class="tag-index">
+      <div class="tag-index__header">
+        <div class="container">
+          <a href="/trabajos" class="label tag-index__back">← Volver a trabajos</a>
+          <h1>#{tag}</h1>
+          <p class="tag-index__count">{projects.length} {projects.length === 1 ? 'proyecto' : 'proyectos'}</p>
+        </div>
+      </div>
+
+      <div class="container tag-index__content">
+        <div class="tag-index__list">
+          {projects.map((project) => (
+            <a href={`/trabajos/${project.id}`} class="tag-item">
+              <div class="tag-item__body">
+                <span class="tag-item__cat label">{project.data.category}</span>
+                <h3 class="tag-item__title">{project.data.title}</h3>
+                <p class="tag-item__client">{project.data.client}</p>
+                <p class="tag-item__desc">{project.data.description}</p>
+              </div>
+              <span class="tag-item__arrow">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .tag-index__header {
+    background-color: var(--negro);
+    padding-top: calc(60px + var(--space-xl));
+    padding-bottom: var(--space-xl);
+    color: var(--hueso);
+  }
+
+  .tag-index__back {
+    display: inline-block;
+    color: var(--naranja);
+    margin-bottom: var(--space-md);
+    transition: color var(--duration-fast);
+  }
+
+  .tag-index__back:hover { color: var(--hueso); }
+
+  .tag-index__header h1 {
+    color: var(--hueso);
+    font-size: var(--fs-2xl);
+    letter-spacing: var(--tracking-tight);
+    text-transform: lowercase;
+  }
+
+  .tag-index__count {
+    color: var(--gris);
+    font-size: var(--fs-base);
+    margin-top: var(--space-xs);
+  }
+
+  .tag-index__content {
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .tag-index__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tag-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--borde);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .tag-item:first-child {
+    border-top: 1px solid var(--borde);
+  }
+
+  .tag-item:hover {
+    padding-left: var(--space-sm);
+    background: var(--naranja-soft);
+    border-radius: var(--radius-md);
+  }
+
+  .tag-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .tag-item__cat { color: var(--lila); }
+
+  .tag-item__title {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  .tag-item__client {
+    color: var(--naranja);
+    font-weight: 500;
+    font-size: var(--fs-sm);
+  }
+
+  .tag-item__desc {
+    font-size: var(--fs-sm);
+    color: var(--gris);
+  }
+
+  .tag-item__arrow {
+    font-size: var(--fs-md);
+    color: var(--borde);
+    transition: all var(--duration-fast);
+    flex-shrink: 0;
+  }
+
+  .tag-item:hover .tag-item__arrow {
+    color: var(--naranja);
+    transform: translateX(4px);
+  }
+</style>

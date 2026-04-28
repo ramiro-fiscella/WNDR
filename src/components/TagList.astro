@@ -1,0 +1,26 @@
+---
+interface Props {
+  tags: string[];
+  basePath: string;
+}
+
+const { tags, basePath } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <div class="tag-list">
+    {tags.map((tag) => (
+      <a href={`${basePath}/tag/${tag.toLowerCase()}`} class="tag">
+        {tag}
+      </a>
+    ))}
+  </div>
+)}
+
+<style>
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+</style>

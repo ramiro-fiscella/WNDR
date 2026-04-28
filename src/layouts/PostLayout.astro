@@ -1,0 +1,153 @@
+---
+import Layout from './Layout.astro';
+import NavBar from '../components/NavBar.astro';
+import Footer from '../components/Footer.astro';
+import TagList from '../components/TagList.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  heroImage?: string;
+  tags?: string[];
+  backLink: string;
+  backLabel: string;
+  tagBasePath: string;
+  client?: string;
+  category?: string;
+}
+
+const { title, description, pubDate, heroImage, tags = [], backLink, backLabel, tagBasePath, client, category } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('es-AR', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<Layout title={`${title} — ESTUDIO WANDER`} description={description}>
+  <NavBar currentPath={Astro.url.pathname} />
+
+  <main>
+    <article class="post">
+      <header class="post__header">
+        <div class="container container--narrow">
+          <a href={backLink} class="post__back label">← {backLabel}</a>
+          <div class="post__meta-top">
+            {category && <span class="post__category label">{category}</span>}
+            <time class="post__date label" datetime={pubDate.toISOString()}>{formattedDate}</time>
+          </div>
+          <h1 class="post__title">{title}</h1>
+          {client && <p class="post__client">{client}</p>}
+          {tags.length > 0 && (
+            <div class="post__tags">
+              <TagList tags={tags} basePath={tagBasePath} />
+            </div>
+          )}
+        </div>
+      </header>
+
+      {heroImage && (
+        <div class="post__hero">
+          <div class="container">
+            <img src={heroImage} alt={title} class="post__hero-img" />
+          </div>
+        </div>
+      )}
+
+      <div class="post__body container container--narrow">
+        <div class="prose">
+          <slot />
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .post__header {
+    background-color: var(--negro);
+    padding-top: calc(60px + var(--space-xl));
+    padding-bottom: var(--space-xl);
+    color: var(--hueso);
+  }
+
+  .post__back {
+    display: inline-block;
+    color: var(--naranja);
+    margin-bottom: var(--space-md);
+    transition: color var(--duration-fast);
+  }
+
+  .post__back:hover { color: var(--hueso); }
+
+  .post__meta-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+  }
+
+  .post__category {
+    color: var(--lila);
+  }
+
+  .post__date {
+    color: var(--gris);
+  }
+
+  .post__title {
+    color: var(--hueso);
+    font-size: var(--fs-2xl);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-xs);
+  }
+
+  .post__client {
+    font-size: var(--fs-base);
+    color: var(--naranja);
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+  }
+
+  .post__tags {
+    margin-top: var(--space-xs);
+  }
+
+  .post__hero {
+    margin-top: calc(-1 * var(--space-lg));
+    margin-bottom: var(--space-lg);
+    position: relative;
+    z-index: 2;
+  }
+
+  .post__hero-img {
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .post__body {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+  );
+
+  document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+    observer.observe(el);
+  });
+</script>

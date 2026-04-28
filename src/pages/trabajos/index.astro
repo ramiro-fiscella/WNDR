@@ -1,0 +1,201 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NavBar from '../../components/NavBar.astro';
+import Footer from '../../components/Footer.astro';
+import TagList from '../../components/TagList.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const allTags = [...new Set(projects.flatMap(p => p.data.tags))];
+---
+
+<Layout title="Trabajos — ESTUDIO WANDER" description="Case studies de proyectos de diseño y marketing.">
+  <NavBar currentPath="/trabajos" />
+
+  <main>
+    <section class="works-index">
+      <div class="works-index__header">
+        <div class="container">
+          <span class="label">Portfolio</span>
+          <h1>Trabajos</h1>
+          <p class="works-index__intro">Cada proyecto es un viaje. Acá están los mapas que fuimos trazando.</p>
+        </div>
+      </div>
+
+      <div class="container works-index__content">
+        {allTags.length > 0 && (
+          <div class="works-index__tags">
+            <span class="label">Filtrar:</span>
+            <TagList tags={allTags} basePath="/trabajos" />
+          </div>
+        )}
+
+        <div class="works-index__list">
+          {projects.map((project, i) => (
+            <a href={`/trabajos/${project.id}`} class="work-item">
+              <span class="work-item__number">{String(i + 1).padStart(2, '0')}</span>
+              <div class="work-item__body">
+                <span class="work-item__cat label">{project.data.category}</span>
+                <h3 class="work-item__title">{project.data.title}</h3>
+                <p class="work-item__desc">{project.data.description}</p>
+              </div>
+              <div class="work-item__end">
+                <span class="work-item__client">{project.data.client}</span>
+                <span class="work-item__arrow">→</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .works-index__header {
+    background-color: var(--negro);
+    padding-top: calc(60px + var(--space-xl));
+    padding-bottom: var(--space-xl);
+    color: var(--hueso);
+  }
+
+  .works-index__header .label {
+    color: var(--naranja);
+    display: block;
+    margin-bottom: var(--space-xs);
+  }
+
+  .works-index__header h1 {
+    color: var(--hueso);
+    font-size: var(--fs-2xl);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .works-index__intro {
+    color: var(--gris);
+    font-size: var(--fs-base);
+    margin-top: var(--space-xs);
+  }
+
+  .works-index__content {
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .works-index__tags {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .works-index__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: var(--space-md);
+    align-items: center;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--borde);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .work-item:first-child {
+    border-top: 1px solid var(--borde);
+  }
+
+  .work-item:hover {
+    padding-left: var(--space-sm);
+    background: var(--naranja-soft);
+    border-radius: var(--radius-md);
+  }
+
+  .work-item__number {
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    color: var(--borde);
+    transition: color var(--duration-fast);
+  }
+
+  .work-item:hover .work-item__number {
+    color: var(--naranja);
+  }
+
+  .work-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .work-item__cat {
+    color: var(--lila);
+    font-size: var(--fs-xs);
+  }
+
+  .work-item__title {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.3;
+  }
+
+  .work-item__desc {
+    font-size: var(--fs-sm);
+    color: var(--gris);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .work-item__end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-xs);
+  }
+
+  .work-item__client {
+    font-size: var(--fs-sm);
+    color: var(--naranja);
+    font-weight: 500;
+  }
+
+  .work-item__arrow {
+    font-size: var(--fs-md);
+    color: var(--borde);
+    transition: all var(--duration-fast);
+  }
+
+  .work-item:hover .work-item__arrow {
+    color: var(--naranja);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .work-item {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+
+    .work-item__number { display: none; }
+
+    .work-item__end {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+</style>

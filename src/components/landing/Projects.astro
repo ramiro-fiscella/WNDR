@@ -1,0 +1,390 @@
+---
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 6);
+---
+
+<section class="projects" id="trabajos">
+  <div class="projects__container container">
+    <div class="projects__header">
+      <span class="label">Trabajos</span>
+      <h2 class="projects__title">Nuestro trabajo</h2>
+    </div>
+
+    <div class="projects__trail">
+      <!-- Vertical trail line -->
+      <div class="trail-line" aria-hidden="true">
+        <div class="trail-line__fill"></div>
+      </div>
+
+      {projects.map((project, i) => (
+        <a
+          href={`/trabajos/${project.id}`}
+          class:list={['trail-card', i % 2 === 0 ? 'trail-card--left' : 'trail-card--right']}
+          data-trail-index={i}
+        >
+          <!-- Trail node -->
+          <div class="trail-card__node" aria-hidden="true">
+            <span class="trail-card__dot"></span>
+          </div>
+
+          <!-- Image -->
+          <div class="trail-card__image">
+            {project.data.heroImage ? (
+              <img
+                src={project.data.heroImage}
+                alt={`Proyecto: ${project.data.title}`}
+                loading="lazy"
+              />
+            ) : (
+              <div class="trail-card__placeholder">
+                <span class="trail-card__placeholder-letter">{project.data.client.charAt(0)}</span>
+                <span class="trail-card__placeholder-label label">{project.data.category}</span>
+              </div>
+            )}
+          </div>
+
+          <!-- Info -->
+          <div class="trail-card__info">
+            <span class="trail-card__category label">{project.data.category}</span>
+            <h3 class="trail-card__name">{project.data.title}</h3>
+            <p class="trail-card__client">{project.data.client}</p>
+            <span class="trail-card__cta">Ver proyecto →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="projects__footer">
+      <a href="/trabajos" class="btn btn--primary">Ver todos los trabajos</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects {
+    padding: var(--space-2xl) 0;
+    overflow: hidden;
+  }
+
+  .projects__header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .projects__header .label {
+    color: var(--naranja);
+    display: block;
+    margin-bottom: var(--space-xs);
+  }
+
+  .projects__title {
+    font-size: var(--fs-2xl);
+    letter-spacing: var(--tracking-tight);
+    font-weight: 700;
+  }
+
+  /* ---- Trail Layout ---- */
+  .projects__trail {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  /* Vertical line */
+  .trail-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    background: var(--borde);
+  }
+
+  .trail-line__fill {
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(to bottom, var(--naranja), var(--lila));
+    border-radius: 2px;
+    transition: height 0.1s linear;
+  }
+
+  /* ---- Trail Card ---- */
+  .trail-card {
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    gap: 0;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Node (center dot) */
+  .trail-card__node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .trail-card__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--hueso);
+    border: 2px solid var(--borde);
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .trail-card:hover .trail-card__dot {
+    background: var(--naranja);
+    border-color: var(--naranja);
+    transform: scale(1.3);
+  }
+
+  /* Left card: image left, info right */
+  .trail-card--left .trail-card__image { grid-column: 1; grid-row: 1; }
+  .trail-card--left .trail-card__node  { grid-column: 2; grid-row: 1; }
+  .trail-card--left .trail-card__info  { grid-column: 3; grid-row: 1; padding-left: var(--space-lg); }
+
+  /* Right card: info left, image right */
+  .trail-card--right .trail-card__info  { grid-column: 1; grid-row: 1; text-align: right; padding-right: var(--space-lg); }
+  .trail-card--right .trail-card__node  { grid-column: 2; grid-row: 1; }
+  .trail-card--right .trail-card__image { grid-column: 3; grid-row: 1; }
+
+  /* Image container */
+  .trail-card__image {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--crema);
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .trail-card:hover .trail-card__image {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .trail-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Placeholder */
+  .trail-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    background: linear-gradient(135deg, var(--crema) 0%, var(--hueso) 100%);
+    border: 1.5px dashed var(--borde);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trail-card__placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--naranja), var(--lila));
+    opacity: 0.5;
+  }
+
+  .trail-card__placeholder-letter {
+    font-family: var(--font-main);
+    font-weight: 900;
+    font-size: 4rem;
+    color: var(--naranja);
+    opacity: 0.12;
+    line-height: 1;
+  }
+
+  .trail-card__placeholder-label {
+    color: var(--gris);
+    opacity: 0.5;
+  }
+
+  /* Info */
+  .trail-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .trail-card__category {
+    color: var(--lila);
+    font-size: var(--fs-xs);
+  }
+
+  .trail-card__name {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.2;
+    transition: color var(--duration-fast);
+  }
+
+  .trail-card:hover .trail-card__name {
+    color: var(--naranja);
+  }
+
+  .trail-card__client {
+    font-size: var(--fs-sm);
+    color: var(--gris);
+  }
+
+  .trail-card__cta {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--naranja);
+    margin-top: var(--space-xs);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .trail-card:hover .trail-card__cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Footer */
+  .projects__footer {
+    text-align: center;
+    margin-top: var(--space-2xl);
+  }
+
+  /* ---- Mobile ---- */
+  @media (max-width: 768px) {
+    .trail-line {
+      left: 20px;
+    }
+
+    .trail-card {
+      grid-template-columns: 40px 1fr;
+      grid-template-rows: auto auto;
+      gap: 0;
+    }
+
+    .trail-card__node {
+      grid-column: 1 !important;
+      grid-row: 1 / -1 !important;
+      align-self: start;
+      padding-top: var(--space-xs);
+    }
+
+    .trail-card--left .trail-card__image,
+    .trail-card--right .trail-card__image {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+    }
+
+    .trail-card--left .trail-card__info,
+    .trail-card--right .trail-card__info {
+      grid-column: 2 !important;
+      grid-row: 2 !important;
+      text-align: left;
+      padding-left: 0;
+      padding-right: 0;
+      padding-top: var(--space-sm);
+    }
+
+    .trail-card__dot {
+      width: 10px;
+      height: 10px;
+    }
+  }
+</style>
+
+<script>
+  // GSAP Trail Animations
+  function initTrailAnimations() {
+    // @ts-ignore
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    // @ts-ignore
+    gsap.registerPlugin(ScrollTrigger);
+
+    const trailCards = document.querySelectorAll('.trail-card');
+    const trailFill = document.querySelector('.trail-line__fill');
+
+    // Immediately set cards to hidden (GSAP takes over)
+    // @ts-ignore
+    gsap.set(trailCards, { opacity: 0, y: 30 });
+
+    // Animate trail line fill on scroll
+    if (trailFill) {
+      // @ts-ignore
+      gsap.to(trailFill, {
+        height: '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.projects__trail',
+          start: 'top 80%',
+          end: 'bottom 40%',
+          scrub: 0.8,
+        },
+      });
+    }
+
+    // Animate each card on scroll
+    trailCards.forEach((card) => {
+      const isLeft = card.classList.contains('trail-card--left');
+      const xStart = isLeft ? -50 : 50;
+
+      // @ts-ignore
+      gsap.set(card, { x: xStart });
+
+      // @ts-ignore
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+      });
+
+      // Animate the dot
+      const dot = card.querySelector('.trail-card__dot');
+      if (dot) {
+        // @ts-ignore
+        gsap.set(dot, { scale: 0 });
+        // @ts-ignore
+        gsap.to(dot, {
+          scale: 1,
+          duration: 0.5,
+          ease: 'back.out(3)',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+    });
+  }
+
+  // Run after page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTrailAnimations);
+  } else {
+    initTrailAnimations();
+  }
+</script>

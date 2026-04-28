@@ -1,0 +1,397 @@
+/* ============================================
+   ESTUDIO WANDER — Design System
+   Simple · Humano · Explorador
+   ============================================ */
+
+/* --- Custom Properties --- */
+:root {
+  /* Paleta — Analógica, cálida, de papel */
+  --naranja: #C8804B;
+  --naranja-hover: #B06E3D;
+  --naranja-soft: rgba(200, 128, 75, 0.08);
+  --lila: #907EB3;
+  --lila-hover: #7E6DA3;
+  --lila-soft: rgba(144, 126, 179, 0.08);
+  --hueso: #F4EFE6;
+  --papel: #FAF7F2;
+  --negro: #3B3632;
+  --tierra: #4A433D;
+  --gris: #8A837B;
+  --gris-claro: #AEA69C;
+  --borde: #DAD3C7;
+  --crema: #EDE7DB;
+
+  /* Tipografía */
+  --font-main: 'Jost', sans-serif;
+
+  --fs-xs: 0.72rem;
+  --fs-sm: 0.82rem;
+  --fs-base: 0.95rem;
+  --fs-md: 1.08rem;
+  --fs-lg: 1.3rem;
+  --fs-xl: 1.65rem;
+  --fs-2xl: 2.2rem;
+  --fs-hero: clamp(2.2rem, 1.6rem + 2.5vw, 3.6rem);
+
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-label: 0.1em;
+
+  /* Espaciado */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+
+  /* Radii */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 350ms;
+  --duration-slow: 600ms;
+}
+
+/* --- Reset --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--negro);
+  background-color: var(--papel);
+  overflow-x: hidden;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol { list-style: none; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* --- Tipografía Global --- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-main);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.15;
+  color: var(--negro);
+}
+
+h1 { font-size: var(--fs-hero); font-weight: 700; }
+h2 { font-size: var(--fs-2xl); }
+h3 { font-size: var(--fs-xl); }
+h4 { font-size: var(--fs-lg); }
+h5 { font-size: var(--fs-md); }
+
+/* --- Labels --- */
+.label {
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  line-height: 1;
+  color: var(--gris);
+}
+
+/* --- Utilidades --- */
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.container--wide { max-width: 1320px; }
+.container--narrow { max-width: 720px; }
+
+.section-padding {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+
+/* --- Divider --- */
+.rule {
+  border: none;
+  height: 1px;
+  background: var(--borde);
+  margin: var(--space-md) 0;
+}
+
+/* --- Botones --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tracking-wide);
+  padding: 0.65em 1.4em;
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  border: 1.5px solid transparent;
+}
+
+.btn--primary {
+  background-color: var(--naranja);
+  color: white;
+  border-color: var(--naranja);
+}
+
+.btn--primary:hover {
+  background-color: var(--naranja-hover);
+  border-color: var(--naranja-hover);
+  transform: translateY(-1px);
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--negro);
+  border-color: var(--borde);
+}
+
+.btn--outline:hover {
+  border-color: var(--negro);
+}
+
+.btn--lila {
+  background-color: var(--lila);
+  color: white;
+  border-color: var(--lila);
+}
+
+.btn--lila:hover {
+  background-color: var(--lila-hover);
+  border-color: var(--lila-hover);
+  transform: translateY(-1px);
+}
+
+/* --- Tags --- */
+.tag {
+  display: inline-block;
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  padding: 0.2em 0.55em;
+  border: 1px solid var(--borde);
+  color: var(--gris);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.tag:hover {
+  border-color: var(--naranja);
+  color: var(--naranja);
+}
+
+/* --- Prose (Markdown content) --- */
+.prose {
+  font-size: var(--fs-base);
+  line-height: 1.8;
+  color: var(--gris);
+}
+
+.prose > * + * { margin-top: 1.5em; }
+
+.prose h2 {
+  font-size: var(--fs-lg);
+  color: var(--negro);
+  margin-top: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose h3 {
+  font-size: var(--fs-md);
+  color: var(--negro);
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+.prose p { font-size: var(--fs-base); }
+
+.prose a {
+  color: var(--naranja);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast);
+}
+
+.prose a:hover { color: var(--naranja-hover); }
+
+.prose img {
+  border-radius: var(--radius-md);
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--lila);
+  padding-left: var(--space-md);
+  font-style: italic;
+  color: var(--gris);
+}
+
+.prose ul, .prose ol { padding-left: 1.5em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li + li { margin-top: 0.5em; }
+
+.prose code {
+  font-family: 'Courier New', monospace;
+  background: var(--crema);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+.prose pre {
+  background: var(--negro);
+  color: var(--hueso);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--borde);
+  margin: 2.5em 0;
+}
+
+.prose iframe, .prose video {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose figure { margin: 2em 0; }
+
+.prose figcaption {
+  font-size: var(--fs-sm);
+  color: var(--gris);
+  text-align: center;
+  margin-top: var(--space-xs);
+  font-style: italic;
+}
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Selection --- */
+::selection {
+  background-color: var(--naranja);
+  color: white;
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--papel); }
+::-webkit-scrollbar-thumb { background: var(--borde); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gris-claro); }
+
+/* --- Form Styles --- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-label {
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--gris);
+}
+
+.form-input,
+.form-textarea {
+  font-family: var(--font-main);
+  font-size: var(--fs-base);
+  padding: 0.6em 0.8em;
+  border: 1px solid var(--borde);
+  border-radius: var(--radius-md);
+  background: var(--papel);
+  color: var(--negro);
+  transition: border-color var(--duration-fast);
+  outline: none;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--naranja);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}

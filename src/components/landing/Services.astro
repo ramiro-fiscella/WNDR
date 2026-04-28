@@ -1,0 +1,164 @@
+---
+const designServices = [
+  { name: 'Branding', desc: 'Identidad que cuenta tu historia' },
+  { name: 'Identidad Visual', desc: 'Logo, paleta, tipografía, sistema visual completo' },
+  { name: 'Diseño Web', desc: 'Sitios que funcionan y se sienten bien' },
+  { name: 'Packaging', desc: 'Tu producto en las manos correctas' },
+  { name: 'Editorial', desc: 'Publicaciones que invitan a leer' },
+];
+
+const marketingServices = [
+  { name: 'Estrategia Digital', desc: 'Un plan claro para llegar adonde querés' },
+  { name: 'Social Media', desc: 'Contenido real, no ruido' },
+  { name: 'Contenido', desc: 'Historias que conectan con tu audiencia' },
+  { name: 'Email Marketing', desc: 'Mensajes que se abren y se leen' },
+];
+---
+
+<section class="services section-padding" id="servicios">
+  <div class="container">
+    <div class="services__header">
+      <span class="label">Qué hacemos</span>
+      <h2 class="services__title">Servicios</h2>
+    </div>
+
+    <div class="services__grid">
+      <div class="services__col animate-on-scroll">
+        <div class="services__col-head">
+          <span class="services__dot services__dot--naranja"></span>
+          <h3 class="services__col-title">Diseño</h3>
+        </div>
+        <ul class="services__list">
+          {designServices.map((service) => (
+            <li class="services__item">
+              <span class="services__item-name">{service.name}</span>
+              <span class="services__item-desc">{service.desc}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="services__col animate-on-scroll">
+        <div class="services__col-head">
+          <span class="services__dot services__dot--lila"></span>
+          <h3 class="services__col-title">Marketing</h3>
+        </div>
+        <ul class="services__list">
+          {marketingServices.map((service) => (
+            <li class="services__item services__item--lila">
+              <span class="services__item-name">{service.name}</span>
+              <span class="services__item-desc">{service.desc}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services {
+    background-color: var(--crema);
+  }
+
+  .services__header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .services__header .label {
+    color: var(--naranja);
+    display: block;
+    margin-bottom: var(--space-xs);
+  }
+
+  .services__title {
+    font-size: var(--fs-xl);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .services__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+  }
+
+  .services__col-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+
+  .services__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .services__dot--naranja { background: var(--naranja); }
+  .services__dot--lila { background: var(--lila); }
+
+  .services__col-title {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .services__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .services__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-sm);
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--borde);
+    transition: all var(--duration-fast);
+  }
+
+  .services__item:first-child {
+    border-top: 1px solid var(--borde);
+  }
+
+  .services__item:hover {
+    padding-left: var(--space-xs);
+  }
+
+  .services__item:hover .services__item-name {
+    color: var(--naranja);
+  }
+
+  .services__item--lila:hover .services__item-name {
+    color: var(--lila);
+  }
+
+  .services__item-name {
+    font-weight: 500;
+    font-size: var(--fs-base);
+    transition: color var(--duration-fast);
+  }
+
+  .services__item-desc {
+    font-size: var(--fs-sm);
+    color: var(--gris);
+    text-align: right;
+  }
+
+  @media (max-width: 768px) {
+    .services__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .services__item {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .services__item-desc {
+      text-align: left;
+    }
+  }
+</style>
